@@ -44,11 +44,11 @@ class RunText(SampleBase):
     def run(self):
         offscreen_canvas = self.matrix.CreateFrameCanvas()
         stationary_font = graphics.Font()
-        stationary_font.LoadFont("./fonts/6x9.bdf")
+        stationary_font.LoadFont("./fonts/helvR12.bdf")
         scrolling_font = graphics.Font()
-        scrolling_font.LoadFont("./fonts/8x13.bdf")
+        scrolling_font.LoadFont("./fonts/8x13B.bdf")
         self.update_text_color()
-        stationary_pos = 1
+        stationary_pos = 0
         scrolling_pos = offscreen_canvas.width
         now = arrow.now()
         my_text = [f"{now.hour:02d}:{now.minute:02d}", f"{now.month:02d}/{now.day:02d}"]
@@ -58,7 +58,7 @@ class RunText(SampleBase):
         count = 0
         while True:
             offscreen_canvas.Clear()
-            offset = 7
+            offset = 10
             for text in my_text:
                 graphics.DrawText(
                     offscreen_canvas,
@@ -69,6 +69,7 @@ class RunText(SampleBase):
                     text,
                 )
                 offset += 10
+            offset += 1
             new_pos = graphics.DrawText(
                 offscreen_canvas,
                 scrolling_font,
