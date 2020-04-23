@@ -46,7 +46,7 @@ class RunText(SampleBase):
         stationary_font = graphics.Font()
         stationary_font.LoadFont("./fonts/helvR12.bdf")
         scrolling_font = graphics.Font()
-        scrolling_font.LoadFont("./fonts/8x13B.bdf")
+        scrolling_font.LoadFont("./fonts/7x13B.bdf")
         self.update_text_color()
         stationary_pos = 0
         scrolling_pos = offscreen_canvas.width
@@ -69,7 +69,7 @@ class RunText(SampleBase):
                     text,
                 )
                 offset += 10
-            offset += 1
+            offset += 0
             new_pos = graphics.DrawText(
                 offscreen_canvas,
                 scrolling_font,
