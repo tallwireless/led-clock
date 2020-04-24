@@ -2,6 +2,7 @@
 # Display a runtext with double-buffering.
 from samplebase import SampleBase
 from rgbmatrix import graphics
+from color import ColorContinium
 import time
 import arrow
 
@@ -15,31 +16,6 @@ class RunText(SampleBase):
             help="The text to scroll on the RGB LED panel",
             default="Hello world!",
         )
-        self.continumm = 0
-        self.textColor = None
-
-    def update_text_color(self):
-        self.continumm += 1
-        self.continumm %= 3 * 255
-
-        red = 0
-        green = 0
-        blue = 0
-
-        if self.continumm <= 255:
-            c = self.continumm
-            blue = 255 - c
-            red = c
-        elif self.continumm > 255 and self.continumm <= 511:
-            c = self.continumm - 256
-            red = 255 - c
-            green = c
-        else:
-            c = self.continumm - 512
-            green = 255 - c
-            blue = c
-
-        self.textColor = graphics.Color(red, green, blue)
 
     def run(self):
         offscreen_canvas = self.matrix.CreateFrameCanvas()
@@ -47,25 +23,32 @@ class RunText(SampleBase):
         stationary_font.LoadFont("./fonts/helvR12.bdf")
         scrolling_font = graphics.Font()
         scrolling_font.LoadFont("./fonts/7x13B.bdf")
-        self.update_text_color()
         stationary_pos = 0
         scrolling_pos = offscreen_canvas.width
         now = arrow.now()
-        my_text = [f"{now.hour:02d}:{now.minute:02d}", f"{now.month:02d}/{now.day:02d}"]
-        scrolling_text = ["Mischief Managed", "Hack the Planet!", "Do good."]
+        my_text = [
+            [f"{now.hour:02d}:{now.minute:02d}", ColorContinium(120, -3)],
+            [f"{now.month:02d}/{now.day:02d}", ColorContinium(200, 3)],
+        ]
+        scrolling_text = [
+            ["Hi Kevin!", ColorContinium(45, 20)],
+            ["This is sample text that's really long", ColorContinium(150, 6)],
+            ["Goodbye.", ColorContinium(250, 6)],
+        ]
         st_len = len(scrolling_text)
         st_index = 0
         count = 0
+
         while True:
             offscreen_canvas.Clear()
             offset = 10
-            for text in my_text:
+            for (text, color) in my_text:
                 graphics.DrawText(
                     offscreen_canvas,
                     stationary_font,
                     stationary_pos,
                     offset,
-                    self.textColor,
+                    color.get_color(),
                     text,
                 )
                 offset += 10
@@ -75,8 +58,8 @@ class RunText(SampleBase):
                 scrolling_font,
                 scrolling_pos,
                 offset,
-                self.textColor,
-                scrolling_text[st_index],
+                scrolling_text[st_index][1].get_color(),
+                scrolling_text[st_index][0],
             )
             scrolling_pos -= 1
 
@@ -91,12 +74,11 @@ class RunText(SampleBase):
             if count % 20 == 0:
                 now = arrow.now()
                 my_text = [
-                    f"{now.hour:02d}:{now.minute:02d}",
-                    f"{now.month:02d}/{now.day:02d}",
+                    [f"{now.hour:02d}:{now.minute:02d}", my_text[0][1]],
+                    [f"{now.month:02d}/{now.day:02d}", my_text[1][1]],
                 ]
 
             offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
-            self.update_text_color()
 
 
 # Main function
