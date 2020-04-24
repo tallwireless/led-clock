@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # Display a runtext with double-buffering.
 from samplebase import SampleBase
-from rgbmatrix import graphics
-from color import ColorContinium
+from color import ColorContinium, BaseColor
+from line import ScrollingLine, DateTimeLine
 import time
-import arrow
 
 
 class RunText(SampleBase):
@@ -18,67 +17,42 @@ class RunText(SampleBase):
         )
 
     def run(self):
-        offscreen_canvas = self.matrix.CreateFrameCanvas()
-        stationary_font = graphics.Font()
-        stationary_font.LoadFont("./fonts/helvR12.bdf")
-        scrolling_font = graphics.Font()
-        scrolling_font.LoadFont("./fonts/7x13B.bdf")
-        stationary_pos = 0
-        scrolling_pos = offscreen_canvas.width
-        now = arrow.now()
-        my_text = [
-            [f"{now.hour:02d}:{now.minute:02d}", ColorContinium(120, -3)],
-            [f"{now.month:02d}/{now.day:02d}", ColorContinium(200, 3)],
+        lines = [
+            DateTimeLine(
+                color=ColorContinium(120, -3),
+                font="./fonts/helvR12.bdf",
+                fmt="%H:%Y",
+                height=9,
+            ),
+            DateTimeLine(
+                color=ColorContinium(240, 3),
+                font="./fonts/helvR12.bdf",
+                fmt="%m/%d",
+                height=9,
+            ),
+            ScrollingLine(
+                text="Look Ma! I'm scrolling!",
+                color=BaseColor(255, 0, 255),
+                font="./fonts/7x13B.bdf",
+                height=10,
+            ),
         ]
-        scrolling_text = [
-            ["Hi Kevin!", ColorContinium(45, 20)],
-            ["This is sample text that's really long", ColorContinium(150, 6)],
-            ["Goodbye.", ColorContinium(250, 6)],
-        ]
-        st_len = len(scrolling_text)
-        st_index = 0
+        canvas = self.matrix.CreateFrameCanvas()
         count = 0
-
         while True:
-            offscreen_canvas.Clear()
-            offset = 10
-            for (text, color) in my_text:
-                graphics.DrawText(
-                    offscreen_canvas,
-                    stationary_font,
-                    stationary_pos,
-                    offset,
-                    color.get_color(),
-                    text,
-                )
-                offset += 10
-            offset += 0
-            new_pos = graphics.DrawText(
-                offscreen_canvas,
-                scrolling_font,
-                scrolling_pos,
-                offset,
-                scrolling_text[st_index][1].get_color(),
-                scrolling_text[st_index][0],
-            )
-            scrolling_pos -= 1
-
-            if scrolling_pos + new_pos < 0:
-                st_index += 1
-                if st_index >= st_len:
-                    st_index = 0
-                scrolling_pos = offscreen_canvas.width
-
+            canvas.Clear()
+            offset = 0
+            for line in lines:
+                offset += line.height
+                line.draw(canvas, offset)
+                offset += 1
             time.sleep(0.05)
             count += 1
             if count % 20 == 0:
-                now = arrow.now()
-                my_text = [
-                    [f"{now.hour:02d}:{now.minute:02d}", my_text[0][1]],
-                    [f"{now.month:02d}/{now.day:02d}", my_text[1][1]],
-                ]
-
-            offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                for line in lines:
+                    line.update
+                count = 0
+            canvas = self.matrix.SwapOnVSync(canvas)
 
 
 # Main function
