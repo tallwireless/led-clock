@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # Display a runtext with double-buffering.
 from samplebase import SampleBase
-from color import ColorContinium, BaseColor
-from line import ScrollingLine, DateTimeLine
+from color import ColorContinium
+from line import ScrollingLine, DateTimeLine, MultiScrollingLine
 import time
 
 
@@ -30,13 +30,32 @@ class RunText(SampleBase):
                 fmt="%m/%d",
                 height=9,
             ),
+            MultiScrollingLine(),
+        ]
+        lines[2].addMessage(
             ScrollingLine(
-                text="Look Ma! I'm scrolling!",
-                color=BaseColor(255, 0, 255),
+                text="I solemnly swear I'm up to no good.",
+                color=ColorContinium(3, -48),
                 font="./fonts/7x13B.bdf",
                 height=10,
-            ),
-        ]
+            )
+        )
+        lines[2].addMessage(
+            ScrollingLine(
+                text="Do your best, good sir.",
+                color=ColorContinium(234, -12),
+                font="./fonts/7x13B.bdf",
+                height=10,
+            )
+        )
+        lines[2].addMessage(
+            ScrollingLine(
+                text="Mischief managed.",
+                color=ColorContinium(234, -12),
+                font="./fonts/7x13B.bdf",
+                height=10,
+            )
+        )
         canvas = self.matrix.CreateFrameCanvas()
         count = 0
         while True:
