@@ -83,7 +83,6 @@ class ScrollingLine(TextLine):
             self.completed = False
 
         end_pos = super(ScrollingLine, self).draw(canvas, offset)
-        print(end_pos, self.pos)
         self.pos -= 1
 
         if self.pos + end_pos <= 0:
