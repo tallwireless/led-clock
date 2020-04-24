@@ -21,7 +21,7 @@ class RunText(SampleBase):
             DateTimeLine(
                 color=ColorContinium(120, -3),
                 font="./fonts/helvR12.bdf",
-                fmt="%H:%Y",
+                fmt="%H:%M",
                 height=9,
             ),
             DateTimeLine(
@@ -35,7 +35,7 @@ class RunText(SampleBase):
         lines[2].addMessage(
             ScrollingLine(
                 text="I solemnly swear I'm up to no good.",
-                color=ColorContinium(3, -48),
+                color=ColorContinium(3, -10),
                 font="./fonts/7x13B.bdf",
                 height=10,
             )
@@ -43,7 +43,7 @@ class RunText(SampleBase):
         lines[2].addMessage(
             ScrollingLine(
                 text="Do your best, good sir.",
-                color=ColorContinium(234, -12),
+                color=ColorContinium(234, 5),
                 font="./fonts/7x13B.bdf",
                 height=10,
             )
@@ -69,7 +69,7 @@ class RunText(SampleBase):
             count += 1
             if count % 20 == 0:
                 for line in lines:
-                    line.update
+                    line.update()
                 count = 0
             canvas = self.matrix.SwapOnVSync(canvas)
 
