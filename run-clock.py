@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Display a runtext with double-buffering.
 from samplebase import SampleBase
-from color import ColorContinium
+from color import ColorContinium, BaseColor
 from line import ScrollingLine, DateTimeLine, MultiScrollingLine
 import time
 
@@ -19,16 +19,18 @@ class RunText(SampleBase):
     def run(self):
         lines = [
             DateTimeLine(
-                color=ColorContinium(120, -3),
+                color=BaseColor(255, 0, 0),
                 font="./fonts/helvR12.bdf",
                 fmt="%H:%M",
                 height=9,
+                align="center",
             ),
             DateTimeLine(
                 color=ColorContinium(240, 3),
                 font="./fonts/helvR12.bdf",
-                fmt="%m/%d",
+                fmt="%m/%d/%y",
                 height=9,
+                align="center",
             ),
             MultiScrollingLine(),
         ]
@@ -65,7 +67,7 @@ class RunText(SampleBase):
                 offset += line.height
                 line.draw(canvas, offset)
                 offset += 1
-            time.sleep(0.05)
+            time.sleep(0.03)
             count += 1
             if count % 20 == 0:
                 for line in lines:

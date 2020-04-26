@@ -14,11 +14,6 @@ class TextLine(object):
         else:
             self.color = BaseColor(255, 255, 255)
 
-        if "text" in kwargs:
-            self.text = kwargs["text"]
-        else:
-            self.text = ""
-
         if "pos" in kwargs:
             self.pos = kwargs.pos
         else:
@@ -34,9 +29,33 @@ class TextLine(object):
         else:
             self.height = self.font.height
 
+        if "align" in kwargs:
+            self.align = kwargs["align"]
+        else:
+            self.align = "left"
+
+        if "text" in kwargs:
+            self.text = kwargs["text"]
+        else:
+            self.text = ""
+
+        self.alignText()
+
+    def alignText(self):
+        s = 0
+        for char in self.text:
+            s += self.font.CharacterWidth(ord(char))
+        if self.align == "center":
+            self.pos = int((64 - s) / 2)
+        if self.align == "right":
+            self.pos = 64 - s
+        if self.align == "left":
+            self.pos = 0
+
     def setText(self, text):
         """ Set the value of the text """
         self.text = text
+        self.alignText()
 
     def draw(self, canvas, offset):
         return graphics.DrawText(
@@ -59,7 +78,7 @@ class DateTimeLine(TextLine):
         self.update()
 
     def update(self):
-        self.text = arrow.now().strftime(self.fmt)
+        self.setText(arrow.now().strftime(self.fmt))
 
 
 class ScrollingLine(TextLine):
