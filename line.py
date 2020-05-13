@@ -63,7 +63,7 @@ class TextLine(object):
             canvas, self.font, self.pos, offset, self.color.get_color(), self.text
         )
 
-    def registerDisplay(self, display):
+    def registerScreen(self, display):
         self.display = display
 
     def update(self):
@@ -122,7 +122,7 @@ class MultiScrollingLine(object):
         self.height = 10
         self.mpos = 0
 
-    def registerDisplay(self, display):
+    def registerScreen(self, display):
         pass
 
     def addMessage(self, message):
