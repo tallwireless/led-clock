@@ -1,6 +1,7 @@
 import arrow
 from rgbmatrix import graphics
 from color import BaseColor
+from screen import END_SCREEN
 
 
 class TextLineException(Exception):
@@ -136,6 +137,7 @@ class MultiScrollingLine(object):
             self.mpos += 1
             if self.mpos >= len(self.messages):
                 self.mpos = 0
+            return END_SCREEN
         return end_pos
 
     def update(self):

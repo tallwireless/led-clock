@@ -1,6 +1,10 @@
 import time
 
 
+class END_SCREEN(object):
+    pass
+
+
 class Screen(object):
     def __init__(self, count=100):
         self.elements = []
@@ -27,7 +31,9 @@ class Screen(object):
             offset = start_offset
             for element in self.elements:
                 offset += element.height
-                element.draw(canvas, offset)
+                rv = element.draw(canvas, offset)
+                if rv is END_SCREEN:
+                    return
                 offset += 1
             time.sleep(0.03)
             count += 1
