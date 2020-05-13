@@ -40,6 +40,7 @@ class TextLine(object):
             self.text = ""
 
         self.alignText()
+        self.display = None
 
     def alignText(self):
         s = 0
@@ -61,6 +62,9 @@ class TextLine(object):
         return graphics.DrawText(
             canvas, self.font, self.pos, offset, self.color.get_color(), self.text
         )
+
+    def registerDisplay(self, display):
+        self.display = display
 
     def update(self):
         pass
@@ -117,6 +121,9 @@ class MultiScrollingLine(object):
         self.messages = []
         self.height = 10
         self.mpos = 0
+
+    def registerDisplay(self, display):
+        pass
 
     def addMessage(self, message):
         self.messages.append(message)
