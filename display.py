@@ -1,8 +1,8 @@
-from samplebase import SampleBase
+from ledmatrix import LEDMatrix
 import time
 
 
-class Display(SampleBase):
+class Display(LEDMatrix):
     def __init__(self, *args, **kwargs):
         super(Display, self).__init__(*args, **kwargs)
         self.parser.add_argument(
