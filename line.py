@@ -1,6 +1,7 @@
 import arrow
 from rgbmatrix import graphics
 from color import BaseColor
+from screen import END_SCREEN
 
 
 class TextLineException(Exception):
@@ -63,7 +64,7 @@ class TextLine(object):
             canvas, self.font, self.pos, offset, self.color.get_color(), self.text
         )
 
-    def registerDisplay(self, display):
+    def registerScreen(self, display):
         self.display = display
 
     def update(self):
@@ -122,7 +123,7 @@ class MultiScrollingLine(object):
         self.height = 10
         self.mpos = 0
 
-    def registerDisplay(self, display):
+    def registerScreen(self, display):
         pass
 
     def addMessage(self, message):
@@ -136,6 +137,7 @@ class MultiScrollingLine(object):
             self.mpos += 1
             if self.mpos >= len(self.messages):
                 self.mpos = 0
+            return END_SCREEN
         return end_pos
 
     def update(self):

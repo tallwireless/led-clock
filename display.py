@@ -11,26 +11,21 @@ class Display(LEDMatrix):
             help="The text to scroll on the RGB LED panel",
             default="Hello world!",
         )
-        self.elements = []
+        self.screens = []
 
-    def registerElement(self, element):
-        element.registerDisplay(self)
-        self.elements.append(element)
+    def registerScreen(self, screen):
+        screen.registerDisplay(self)
+        self.screens.append(screen)
+
+    def getCanvas(self):
+        return self.canvas
 
     def run(self):
-        canvas = self.matrix.CreateFrameCanvas()
-        count = 0
+        self.canvas = self.matrix.CreateFrameCanvas()
         while True:
-            canvas.Clear()
-            offset = 0
-            for element in self.elements:
-                offset += element.height
-                element.draw(canvas, offset)
-                offset += 1
-            time.sleep(0.03)
-            count += 1
-            if count % 20 == 0:
-                for element in self.elements:
-                    element.update()
-                count = 0
-            canvas = self.matrix.SwapOnVSync(canvas)
+            self.canvas.Clear()
+            time.sleep(0.05)
+            for screen in self.screens:
+                screen.run()
+                self.canvas.Clear()
+                time.sleep(0.5)
