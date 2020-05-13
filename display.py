@@ -1,4 +1,5 @@
 from ledmatrix import LEDMatrix
+import time
 
 
 class Display(LEDMatrix):
@@ -22,5 +23,9 @@ class Display(LEDMatrix):
     def run(self):
         self.canvas = self.matrix.CreateFrameCanvas()
         while True:
+            self.canvas.Clear()
+            time.sleep(0.05)
             for screen in self.screens:
                 screen.run()
+                self.canvas.Clear()
+                time.sleep(0.5)
