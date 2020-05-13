@@ -52,7 +52,7 @@ if __name__ == "__main__":
             height=10,
         )
     )
-    screen2 = Screen(count=-1)
+    screen2 = Screen(duration=0)
     screen2.registerElement(timeline)
     screen2.registerElement(scrolling)
     display.registerScreen(screen1)
